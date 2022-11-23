@@ -1,10 +1,6 @@
 package net.kunmc.lab.alias.alias;
 
 import net.kunmc.lab.alias.Alias;
-import net.kunmc.lab.alias.alias.color.ColorUtils;
-import net.kunmc.lab.alias.alias.team.TeamOperation;
-import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.haoshoku.nick.api.NickAPI;
 
@@ -26,11 +22,6 @@ public class AliasOperation {
         if (NickAPI.getName(player).equals(name)) {
             return;
         }
-        TextColor color = TeamOperation.getPlayerTeamColor(player);
-        if (color != null) {
-            name = ColorUtils.TextColorToChatColor(color) + name + ChatColor.RESET;
-        }
-
         NickAPI.nick(player, name);
         NickAPI.refreshPlayer(player);
 
