@@ -12,7 +12,11 @@ public class TeamOperation {
         TextColor teamColor = null;
         for (Team team : scoreboard.getTeams()) {
             if (team.hasEntry(player.getName())) {
-                teamColor = team.color();
+                try {
+                    // colorが設定されていないチームを呼ぶとIllegalStateException
+                    teamColor = team.color();
+                } catch (IllegalStateException e) {
+                }
             }
         }
         return teamColor;
