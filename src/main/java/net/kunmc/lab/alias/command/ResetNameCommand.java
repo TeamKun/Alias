@@ -1,6 +1,7 @@
 package net.kunmc.lab.alias.command;
 
 import net.kunmc.lab.alias.Alias;
+import net.kunmc.lab.alias.alias.AliasOperation;
 import net.kunmc.lab.commandlib.Command;
 import net.kunmc.lab.commandlib.CommandContext;
 import org.bukkit.entity.Player;
@@ -15,20 +16,13 @@ public class ResetNameCommand extends Command {
         argument(builder -> {
             builder.playersArgument("target", null, ctx -> {
                 List<Player> players = (List<Player>) ctx.getParsedArg(0);
-                resetPlayerName(players);
+                AliasOperation.resetPlayerName(players);
                 sendMessage(ctx);
                 players.forEach(p -> {
                     Alias.getPlugin().config.playerAlias.remove(p.getUniqueId());
                 });
                 Alias.getPlugin().config.saveConfig();
             });
-        });
-    }
-
-    private void resetPlayerName(List<Player> players) {
-        players.forEach(p -> {
-            NickAPI.resetNick(p);
-            NickAPI.refreshPlayer(p);
         });
     }
 

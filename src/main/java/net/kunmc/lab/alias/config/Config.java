@@ -1,10 +1,7 @@
 package net.kunmc.lab.alias.config;
 
 import net.kunmc.lab.configlib.BaseConfig;
-import net.kunmc.lab.configlib.MapValue;
-import net.kunmc.lab.configlib.value.collection.StringListValue;
 import net.kunmc.lab.configlib.value.map.UUID2StringMapValue;
-import org.apache.commons.collections4.ListValuedMap;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,5 +16,11 @@ public class Config extends BaseConfig {
     @Override
     public void saveConfig() {
         super.saveConfig();
+    }
+
+    @Override
+    public boolean loadConfig() {
+        super.loadConfig();
+        return true;
     }
 }
