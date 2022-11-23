@@ -5,7 +5,6 @@ import net.kunmc.lab.alias.alias.AliasOperation;
 import net.kunmc.lab.commandlib.Command;
 import net.kunmc.lab.commandlib.CommandContext;
 import org.bukkit.entity.Player;
-import xyz.haoshoku.nick.api.NickAPI;
 
 import java.util.List;
 

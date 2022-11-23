@@ -1,6 +1,5 @@
 package net.kunmc.lab.alias.listener;
 
-import net.kunmc.lab.alias.Alias;
 import net.kunmc.lab.alias.alias.AliasOperation;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

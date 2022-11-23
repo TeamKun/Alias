@@ -6,7 +6,6 @@ import net.kunmc.lab.commandlib.Command;
 import net.kunmc.lab.commandlib.CommandContext;
 import net.kunmc.lab.commandlib.argument.StringArgument;
 import org.bukkit.entity.Player;
-import xyz.haoshoku.nick.api.NickAPI;
 
 public class SetNameCommand extends Command {
     public SetNameCommand() {
