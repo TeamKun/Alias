@@ -12,5 +12,5 @@ Playerの名前の表示を変更できるプラグイン
 
 ## コマンド
 
-/alias setPlayerName Player名 変更後の名前  
-/alias resetPlayerName 変更元の名前
+/alias setname Player名 変更後の名前  
+/alias resetname 変更元の名前

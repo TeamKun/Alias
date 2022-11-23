@@ -16,6 +16,9 @@ public class AliasOperation {
             NickAPI.resetNick(p);
             NickAPI.refreshPlayer(p);
         });
+        players.forEach(p -> {
+            p.setDisplayName(p.getName());
+        });
     }
 
     public static void setPlayerName(Player player, String name) {
