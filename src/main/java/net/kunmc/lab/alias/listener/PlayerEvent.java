@@ -34,6 +34,10 @@ public class PlayerEvent implements Listener {
                 }
                 if (targetPlayer.size() != 0) {
                     AliasOperation.resetPlayerName(targetPlayer);
+                    targetPlayer.forEach(p -> {
+                        Alias.getPlugin().config.playerAlias.remove(p.getUniqueId());
+                    });
+                    Alias.getPlugin().config.saveConfig();
                     e.setCancelled(true);
                 }
             }
