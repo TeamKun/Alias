@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerEvent implements Listener {
@@ -19,10 +21,30 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    private void onCommand(PlayerCommandPreprocessEvent e) {
+    private void onCommandAlias(PlayerCommandPreprocessEvent e) {
+        if (e.getMessage().contains("/alias ")) {
+            String[] messages = e.getMessage().split(" ");
+            if (messages.length == 3 && messages[1].equals("resetname")) {
+                List<Player> targetPlayer = new ArrayList<>();
+                for (UUID uuid : Alias.getPlugin().config.playerAlias.keySet()) {
+                    if (messages[2].equals(Alias.getPlugin().config.playerAlias.get(uuid))) {
+                        targetPlayer.add(getPlayerFromUUID(uuid));
+                        break;
+                    }
+                }
+                if (targetPlayer.size() != 0) {
+                    AliasOperation.resetPlayerName(targetPlayer);
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    private void onCommandTp(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
 
-        // tp, giveはよく使うので個別対応しておく
+        // tpはよく使うので個別対応しておく
         if (e.getMessage().contains("/tp ")) {
             String[] messages = e.getMessage().split(" ");
             if (messages.length == 2) {
