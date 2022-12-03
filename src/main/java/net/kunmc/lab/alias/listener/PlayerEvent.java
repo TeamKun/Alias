@@ -2,6 +2,7 @@ package net.kunmc.lab.alias.listener;
 
 import net.kunmc.lab.alias.Alias;
 import net.kunmc.lab.alias.alias.AliasOperation;
+import net.kunmc.lab.alias.util.DecolationConst;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -48,34 +49,19 @@ public class PlayerEvent implements Listener {
     private void onCommandTp(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
 
-        // tpはよく使うので個別対応しておく
+        // tp個別対応しておく
         if (e.getMessage().contains("/tp ")) {
             String[] messages = e.getMessage().split(" ");
             if (messages.length == 2) {
-                Player distPlayer = null;
-                for (UUID uuid : Alias.getPlugin().config.playerAlias.keySet()) {
-                    if (messages[1].equals(Alias.getPlugin().config.playerAlias.get(uuid))) {
-                        distPlayer = getPlayerFromUUID(uuid);
-                        break;
-                    }
-                }
+                Player distPlayer = getPlayerFromAlias(messages[1]);
                 if (distPlayer != null) {
                     player.teleport(distPlayer.getLocation());
                     e.setCancelled(true);
                 }
             } else if (messages.length == 3) {
-                Player distPlayer = null;
-                Player srcPlayer = null;
-                for (UUID uuid : Alias.getPlugin().config.playerAlias.keySet()) {
-                    if (messages[1].equals(Alias.getPlugin().config.playerAlias.get(uuid))) {
-                        srcPlayer = getPlayerFromUUID(uuid);
-                    }
-                    if (messages[2].equals(Alias.getPlugin().config.playerAlias.get(uuid))) {
-                        distPlayer = getPlayerFromUUID(uuid);
-                    }
-                }
+                Player srcPlayer = getPlayerFromAlias(messages[1]);
+                Player distPlayer = getPlayerFromAlias(messages[2]);
                 if (distPlayer == null && srcPlayer != null) {
-                } else if (distPlayer != null && srcPlayer == null) {
                     distPlayer = getPlayerFromName(messages[2]);
                     if (distPlayer != null) {
                         srcPlayer.teleport(distPlayer.getLocation());
@@ -93,6 +79,32 @@ public class PlayerEvent implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    private void onCommandTell(PlayerCommandPreprocessEvent e) {
+        if (e.getMessage().contains("/tell ") || e.getMessage().contains("/w ") || e.getMessage().contains("/msg ")) {
+            String[] messages = e.getMessage().split(" ");
+            if (messages.length == 3) {
+                Player sentTargetPlayer = getPlayerFromAlias(messages[1]);
+                if (sentTargetPlayer != null) {
+                    sentTargetPlayer.sendMessage(DecolationConst.GRAY + e.getPlayer().getName() + "にささやかれました: " + messages[2] + DecolationConst.RESET);
+                    e.getPlayer().sendMessage(DecolationConst.GRAY + messages[1] + "にささやきました: " + messages[2] + DecolationConst.RESET);
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    private Player getPlayerFromAlias(String alias) {
+        Player player = null;
+        for (UUID uuid : Alias.getPlugin().config.playerAlias.keySet()) {
+            if (alias.equals(Alias.getPlugin().config.playerAlias.get(uuid))) {
+                player = getPlayerFromUUID(uuid);
+                break;
+            }
+        }
+        return player;
     }
 
     private Player getPlayerFromUUID(UUID uuid) {
