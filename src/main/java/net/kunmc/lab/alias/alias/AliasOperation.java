@@ -12,6 +12,7 @@ public class AliasOperation {
             NickAPI.resetNick(p);
             NickAPI.refreshPlayer(p);
         });
+
         players.forEach(p -> {
             p.setDisplayName(p.getName());
         });
@@ -19,7 +20,8 @@ public class AliasOperation {
 
     public static void setPlayerName(Player player, String name) {
         // ニックネームが既についているなら何もしない
-        if (NickAPI.getName(player).equals(name)) {
+        if (NickAPI.getName(player)
+                   .equals(name)) {
             return;
         }
         NickAPI.nick(player, name);
@@ -29,7 +31,9 @@ public class AliasOperation {
     }
 
     public static void applyConfigPlayerName(Player player) {
-        if (!Alias.getPlugin().config.playerAlias.containsKey(player.getUniqueId())) return;
+        if (!Alias.getPlugin().config.playerAlias.containsKey(player.getUniqueId())) {
+            return;
+        }
 
         setPlayerName(player, Alias.getPlugin().config.playerAlias.get(player.getUniqueId()));
     }

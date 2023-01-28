@@ -23,16 +23,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 public final class Alias extends JavaPlugin implements Listener {
+    private static final Map<UUID, String> playerUUIDToNameMap = new HashMap<>();
     @Getter
     private static Alias plugin;
-    private static final Map<UUID, String> playerUUIDToNameMap = new HashMap<>();
-
     public Config config;
 
     @Override
     public void onEnable() {
         plugin = this;
-        // Config
         config = new Config(this);
 
         for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
@@ -45,7 +43,7 @@ public final class Alias extends JavaPlugin implements Listener {
 
         // Event
         getServer().getPluginManager()
-                   .registerEvents(new PlayerEvent(), plugin);
+                   .registerEvents(new PlayerEvent(config), plugin);
         getServer().getPluginManager()
                    .registerEvents(this, plugin);
 
@@ -54,8 +52,8 @@ public final class Alias extends JavaPlugin implements Listener {
                            @Override
                            public void onPacketSending(PacketEvent event) {
                                PacketContainer packet = event.getPacket();
-                               ArrayList<String> names = ((ArrayList<String>) packet.getSpecificModifier(Collection.class)
-                                                                                    .read(0));
+                               List<String> names = ((List<String>) packet.getSpecificModifier(Collection.class)
+                                                                          .read(0));
 
                                List<String> newNames = new ArrayList<>();
                                for (String name : names) {
