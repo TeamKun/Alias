@@ -80,6 +80,7 @@ public final class Alias extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        AliasOperation.resetPlayerName(new ArrayList<>(Bukkit.getOnlinePlayers()));
     }
 
     @EventHandler
