@@ -9,6 +9,7 @@ import net.kunmc.lab.commandlib.argument.StringArgument;
 public class SetNameCommand extends Command {
     public SetNameCommand() {
         super("setname");
+       
         argument(new PlayerArgument("target"), new StringArgument("name"), (player, name, ctx) -> {
             Alias.getPlugin().config.playerAlias.put(player.getUniqueId(), name);
             AliasOperation.setPlayerName(player, name);

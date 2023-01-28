@@ -6,6 +6,7 @@ import net.kunmc.lab.configlib.ConfigCommand;
 public class MainCommand extends Command {
     public MainCommand(ConfigCommand configCommand) {
         super("alias");
+       
         addChildren(new SetNameCommand(), new ResetNameCommand(), configCommand);
     }
 }

@@ -2,29 +2,24 @@ package net.kunmc.lab.alias.listener;
 
 import net.kunmc.lab.alias.alias.AliasOperation;
 import net.kunmc.lab.alias.config.Config;
-import net.kunmc.lab.alias.util.DecolationConst;
-import org.bukkit.Bukkit;
+import net.kunmc.lab.alias.util.AliasUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
-public class PlayerEvent implements Listener {
+public class CommandListeners implements Listener {
     private final Config config;
 
-    public PlayerEvent(Config config) {
+    public CommandListeners(Config config) {
         this.config = config;
-    }
-
-    @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
-        AliasOperation.applyConfigPlayerName(event.getPlayer());
     }
 
     @EventHandler
@@ -40,7 +35,7 @@ public class PlayerEvent implements Listener {
             List<Player> targetPlayer = new ArrayList<>();
             for (UUID uuid : config.playerAlias.keySet()) {
                 if (messages[2].equals(config.playerAlias.get(uuid))) {
-                    targetPlayer.add(getPlayerFromUUID(uuid));
+                    targetPlayer.add(AliasUtil.getPlayerFromUUID(uuid));
                     break;
                 }
             }
@@ -68,7 +63,7 @@ public class PlayerEvent implements Listener {
 
         // エンティティへtpするパターン
         if (messages.length == 2) {
-            Player distPlayer = getPlayerFromAlias(messages[1]);
+            Player distPlayer = AliasUtil.getPlayerFromAlias(messages[1]);
             if (distPlayer != null) {
                 player.teleport(distPlayer.getLocation());
                 e.setCancelled(true);
@@ -78,11 +73,11 @@ public class PlayerEvent implements Listener {
 
         // エンティティをエンティティへtpさせるパターン
         if (messages.length == 3) {
-            Player srcPlayer = getPlayerFromAlias(messages[1]);
-            Player distPlayer = getPlayerFromAlias(messages[2]);
+            Player srcPlayer = AliasUtil.getPlayerFromAlias(messages[1]);
+            Player distPlayer = AliasUtil.getPlayerFromAlias(messages[2]);
 
             if (srcPlayer == null && distPlayer != null) {
-                srcPlayer = getPlayerFromName(messages[1]);
+                srcPlayer = AliasUtil.getPlayerFromName(messages[1]);
                 if (srcPlayer != null) {
                     srcPlayer.teleport(distPlayer.getLocation());
                     e.setCancelled(true);
@@ -91,7 +86,7 @@ public class PlayerEvent implements Listener {
             }
 
             if (srcPlayer != null && distPlayer == null) {
-                distPlayer = getPlayerFromName(messages[2]);
+                distPlayer = AliasUtil.getPlayerFromName(messages[2]);
                 if (distPlayer != null) {
                     srcPlayer.teleport(distPlayer.getLocation());
                     e.setCancelled(true);
@@ -108,7 +103,7 @@ public class PlayerEvent implements Listener {
 
         // エンティティを特定の座標にtpさせるパターン
         if (messages.length == 5) {
-            Player distPlayer = getPlayerFromAlias(messages[1]);
+            Player distPlayer = AliasUtil.getPlayerFromAlias(messages[1]);
             if (distPlayer != null) {
                 player.teleport(parseCoordinates(e.getPlayer(), Arrays.copyOfRange(messages, 2, 5)));
                 e.setCancelled(true);
@@ -129,7 +124,7 @@ public class PlayerEvent implements Listener {
                 coordinates[i] = Double.parseDouble(s);
                 continue;
             }
-           
+
             if (s.length() > 1) {
                 coordinates[i] = coordinates[i] + Double.parseDouble(s.substring(1));
             }
@@ -148,39 +143,14 @@ public class PlayerEvent implements Listener {
                              .split(" ");
 
         if (messages.length == 3) {
-            Player sentTargetPlayer = getPlayerFromAlias(messages[1]);
+            Player sentTargetPlayer = AliasUtil.getPlayerFromAlias(messages[1]);
             if (sentTargetPlayer != null) {
-                sentTargetPlayer.sendMessage(DecolationConst.GRAY + e.getPlayer()
-                                                                     .getName() + "にささやかれました: " + messages[2] + DecolationConst.RESET);
+                sentTargetPlayer.sendMessage(ChatColor.GRAY + e.getPlayer()
+                                                               .getName() + "にささやかれました: " + messages[2] + ChatColor.RESET);
                 e.getPlayer()
-                 .sendMessage(DecolationConst.GRAY + messages[1] + "にささやきました: " + messages[2] + DecolationConst.RESET);
+                 .sendMessage(ChatColor.GRAY + messages[1] + "にささやきました: " + messages[2] + ChatColor.RESET);
                 e.setCancelled(true);
             }
         }
-    }
-
-    @Nullable
-    private Player getPlayerFromAlias(String alias) {
-        return config.playerAlias.keySet()
-                                 .stream()
-                                 .filter(x -> alias.equals(config.playerAlias.get(x)))
-                                 .findFirst()
-                                 .map(this::getPlayerFromUUID)
-                                 .orElse(null);
-    }
-
-    @Nullable
-    private Player getPlayerFromUUID(UUID uuid) {
-        return Bukkit.getOfflinePlayer(uuid)
-                     .getPlayer();
-    }
-
-    @Nullable
-    private Player getPlayerFromName(String name) {
-        return Arrays.stream(Bukkit.getOfflinePlayers())
-                     .filter(x -> Objects.equals(x.getName(), name))
-                     .findFirst()
-                     .map(OfflinePlayer::getPlayer)
-                     .orElse(null);
     }
 }

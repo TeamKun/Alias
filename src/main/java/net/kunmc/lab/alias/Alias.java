@@ -6,9 +6,10 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import lombok.Getter;
+import net.kunmc.lab.alias.alias.AliasOperation;
 import net.kunmc.lab.alias.command.MainCommand;
 import net.kunmc.lab.alias.config.Config;
-import net.kunmc.lab.alias.listener.PlayerEvent;
+import net.kunmc.lab.alias.listener.CommandListeners;
 import net.kunmc.lab.commandlib.CommandLib;
 import net.kunmc.lab.configlib.ConfigCommand;
 import net.kunmc.lab.configlib.ConfigCommandBuilder;
@@ -43,7 +44,7 @@ public final class Alias extends JavaPlugin implements Listener {
 
         // Event
         getServer().getPluginManager()
-                   .registerEvents(new PlayerEvent(config), plugin);
+                   .registerEvents(new CommandListeners(config), plugin);
         getServer().getPluginManager()
                    .registerEvents(this, plugin);
 
@@ -89,5 +90,7 @@ public final class Alias extends JavaPlugin implements Listener {
                                     e.getPlayer()
                                      .getName());
         }
+
+        AliasOperation.applyConfigPlayerName(p);
     }
 }

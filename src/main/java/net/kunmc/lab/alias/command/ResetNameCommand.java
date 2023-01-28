@@ -9,6 +9,7 @@ import net.kunmc.lab.commandlib.argument.PlayersArgument;
 public class ResetNameCommand extends Command {
     public ResetNameCommand() {
         super("resetname");
+       
         argument(new PlayersArgument("target"), (players, ctx) -> {
             players.forEach(p -> {
                 Alias.getPlugin().config.playerAlias.remove(p.getUniqueId());
