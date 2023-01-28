@@ -24,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 public final class Alias extends JavaPlugin implements Listener {
+    // OfflinePlayer#getNameを毎回呼ぶのは重いのでキャッシュする
     private static final Map<UUID, String> playerUUIDToNameMap = new HashMap<>();
     @Getter
     private static Alias plugin;
