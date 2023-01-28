@@ -32,10 +32,10 @@ repositories {
 dependencies {
     compileOnly "com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT"
     compileOnly "com.comphenix.protocol:ProtocolLib:4.7.0"
-    //compileOnly name: "patched_1.16.5"
+//    compileOnly name: "patched_1.16.5"
     compileOnly "xyz.haoshoku.nick:nickapi:6.3.3-SNAPSHOT"
-    implementation 'com.github.TeamKun.CommandLib:bukkit:latest.release'
-    implementation 'com.github.TeamKun.ConfigLib:bukkit:latest.release'
+    implementation 'com.github.TeamKun.CommandLib:bukkit:0.12.2'
+    implementation 'com.github.TeamKun.ConfigLib:bukkit:0.16.2'
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'

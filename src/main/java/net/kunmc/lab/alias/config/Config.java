@@ -7,20 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class Config extends BaseConfig {
     // UUID, Player名のaliasを保持
-    public net.kunmc.lab.configlib.value.map.UUID2StringMapValue playerAlias = new UUID2StringMapValue();
+    public UUID2StringMapValue playerAlias = new UUID2StringMapValue();
 
     public Config(@NotNull Plugin plugin) {
         super(plugin);
-    }
-
-    @Override
-    public void saveConfig() {
-        super.saveConfig();
-    }
-
-    @Override
-    public boolean loadConfig() {
-        super.loadConfig();
-        return true;
     }
 }

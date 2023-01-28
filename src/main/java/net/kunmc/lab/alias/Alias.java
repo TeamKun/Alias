@@ -32,34 +32,39 @@ public final class Alias extends JavaPlugin {
         plugin = this;
         // Config
         config = new Config(this);
-        config.loadConfig();
 
         // Command
         ConfigCommand configCommand = new ConfigCommandBuilder(config).build();
         CommandLib.register(this, new MainCommand(configCommand));
 
         // Event
-        getServer().getPluginManager().registerEvents(new PlayerEvent(), plugin);
+        getServer().getPluginManager()
+                   .registerEvents(new PlayerEvent(), plugin);
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Server.SCOREBOARD_TEAM) {
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                PacketContainer packet = event.getPacket();
-                ArrayList<String> players = ((ArrayList<String>) packet.getSpecificModifier(Collection.class).read(0));
-                List<String> newPlayers = new ArrayList<>();
-                for (String player : players) {
-                    String targetName = player;
-                    for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-                        if (offlinePlayer.getName().equals(player) && Alias.getPlugin().config.playerAlias.containsKey(offlinePlayer.getUniqueId())) {
-                            targetName = Alias.getPlugin().config.playerAlias.get(offlinePlayer.getUniqueId());
-                            break;
-                        }
-                    }
-                    newPlayers.add(targetName);
-                }
-                packet.getSpecificModifier(Collection.class).write(0, newPlayers);
-            }
-        });
+        ProtocolLibrary.getProtocolManager()
+                       .addPacketListener(new PacketAdapter(this, PacketType.Play.Server.SCOREBOARD_TEAM) {
+                           @Override
+                           public void onPacketSending(PacketEvent event) {
+                               PacketContainer packet = event.getPacket();
+                               ArrayList<String> players = ((ArrayList<String>) packet.getSpecificModifier(Collection.class)
+                                                                                      .read(0));
+                               List<String> newPlayers = new ArrayList<>();
+                               for (String player : players) {
+                                   String targetName = player;
+                                   for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+                                       if (offlinePlayer.getName()
+                                                        .equals(player) && Alias.getPlugin().config.playerAlias.containsKey(
+                                               offlinePlayer.getUniqueId())) {
+                                           targetName = Alias.getPlugin().config.playerAlias.get(offlinePlayer.getUniqueId());
+                                           break;
+                                       }
+                                   }
+                                   newPlayers.add(targetName);
+                               }
+                               packet.getSpecificModifier(Collection.class)
+                                     .write(0, newPlayers);
+                           }
+                       });
     }
 
     @Override

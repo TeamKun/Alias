@@ -23,8 +23,10 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     private void onCommandAlias(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().contains("/alias ")) {
-            String[] messages = e.getMessage().split(" ");
+        if (e.getMessage()
+             .contains("/alias ")) {
+            String[] messages = e.getMessage()
+                                 .split(" ");
             if (messages.length == 3 && messages[1].equals("resetname")) {
                 List<Player> targetPlayer = new ArrayList<>();
                 for (UUID uuid : Alias.getPlugin().config.playerAlias.keySet()) {
@@ -38,7 +40,6 @@ public class PlayerEvent implements Listener {
                     targetPlayer.forEach(p -> {
                         Alias.getPlugin().config.playerAlias.remove(p.getUniqueId());
                     });
-                    Alias.getPlugin().config.saveConfig();
                     e.setCancelled(true);
                 }
             }
@@ -50,8 +51,10 @@ public class PlayerEvent implements Listener {
         Player player = e.getPlayer();
 
         // tp個別対応しておく
-        if (e.getMessage().contains("/tp ")) {
-            String[] messages = e.getMessage().split(" ");
+        if (e.getMessage()
+             .contains("/tp ")) {
+            String[] messages = e.getMessage()
+                                 .split(" ");
             if (messages.length == 2) {
                 Player distPlayer = getPlayerFromAlias(messages[1]);
                 if (distPlayer != null) {
@@ -83,13 +86,19 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     private void onCommandTell(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().contains("/tell ") || e.getMessage().contains("/w ") || e.getMessage().contains("/msg ")) {
-            String[] messages = e.getMessage().split(" ");
+        if (e.getMessage()
+             .contains("/tell ") || e.getMessage()
+                                     .contains("/w ") || e.getMessage()
+                                                          .contains("/msg ")) {
+            String[] messages = e.getMessage()
+                                 .split(" ");
             if (messages.length == 3) {
                 Player sentTargetPlayer = getPlayerFromAlias(messages[1]);
                 if (sentTargetPlayer != null) {
-                    sentTargetPlayer.sendMessage(DecolationConst.GRAY + e.getPlayer().getName() + "にささやかれました: " + messages[2] + DecolationConst.RESET);
-                    e.getPlayer().sendMessage(DecolationConst.GRAY + messages[1] + "にささやきました: " + messages[2] + DecolationConst.RESET);
+                    sentTargetPlayer.sendMessage(DecolationConst.GRAY + e.getPlayer()
+                                                                         .getName() + "にささやかれました: " + messages[2] + DecolationConst.RESET);
+                    e.getPlayer()
+                     .sendMessage(DecolationConst.GRAY + messages[1] + "にささやきました: " + messages[2] + DecolationConst.RESET);
                     e.setCancelled(true);
                 }
             }
@@ -110,7 +119,8 @@ public class PlayerEvent implements Listener {
     private Player getPlayerFromUUID(UUID uuid) {
         Player targetPlayer = null;
         for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            if (offlinePlayer.getUniqueId().equals(uuid)) {
+            if (offlinePlayer.getUniqueId()
+                             .equals(uuid)) {
                 targetPlayer = offlinePlayer.getPlayer();
             }
         }
@@ -120,7 +130,8 @@ public class PlayerEvent implements Listener {
     private Player getPlayerFromName(String name) {
         Player targetPlayer = null;
         for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            if (offlinePlayer.getName().equals(name)) {
+            if (offlinePlayer.getName()
+                             .equals(name)) {
                 targetPlayer = offlinePlayer.getPlayer();
             }
         }

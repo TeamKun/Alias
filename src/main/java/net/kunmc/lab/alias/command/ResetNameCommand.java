@@ -20,7 +20,6 @@ public class ResetNameCommand extends Command {
                 players.forEach(p -> {
                     Alias.getPlugin().config.playerAlias.remove(p.getUniqueId());
                 });
-                Alias.getPlugin().config.saveConfig();
             });
         });
     }

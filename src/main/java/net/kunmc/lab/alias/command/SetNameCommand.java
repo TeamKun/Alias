@@ -12,14 +12,13 @@ public class SetNameCommand extends Command {
         super("setname");
         argument(builder -> {
             builder.playerArgument("target")
-                    .stringArgument("name", StringArgument.Type.PHRASE, null, ctx -> {
-                        Player player = (Player) ctx.getParsedArg(0);
-                        String name = ctx.getParsedArg("name", String.class);
-                        AliasOperation.setPlayerName(player, name);
-                        sendMessage(ctx, player, name);
-                        Alias.getPlugin().config.playerAlias.put(player.getUniqueId(), name);
-                        Alias.getPlugin().config.saveConfig();
-                    });
+                   .stringArgument("name", StringArgument.Type.PHRASE, null, ctx -> {
+                       Player player = (Player) ctx.getParsedArg(0);
+                       String name = ctx.getParsedArg("name", String.class);
+                       AliasOperation.setPlayerName(player, name);
+                       sendMessage(ctx, player, name);
+                       Alias.getPlugin().config.playerAlias.put(player.getUniqueId(), name);
+                   });
         });
     }
 
