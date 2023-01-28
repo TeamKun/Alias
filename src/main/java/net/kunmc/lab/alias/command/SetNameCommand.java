@@ -10,8 +10,8 @@ public class SetNameCommand extends Command {
     public SetNameCommand() {
         super("setname");
         argument(new PlayerArgument("target"), new StringArgument("name"), (player, name, ctx) -> {
-            AliasOperation.setPlayerName(player, name);
             Alias.getPlugin().config.playerAlias.put(player.getUniqueId(), name);
+            AliasOperation.setPlayerName(player, name);
 
             ctx.sendSuccess(player.getName() + "の名前を" + name + "に変更しました");
         });

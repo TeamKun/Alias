@@ -10,10 +10,10 @@ public class ResetNameCommand extends Command {
     public ResetNameCommand() {
         super("resetname");
         argument(new PlayersArgument("target"), (players, ctx) -> {
-            AliasOperation.resetPlayerName(players);
             players.forEach(p -> {
                 Alias.getPlugin().config.playerAlias.remove(p.getUniqueId());
             });
+            AliasOperation.resetPlayerName(players);
 
             ctx.sendSuccess("指定されたプレイヤーの名前を元に戻しました");
         });
