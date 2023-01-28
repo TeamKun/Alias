@@ -4,6 +4,7 @@ import net.kunmc.lab.alias.alias.AliasOperation;
 import net.kunmc.lab.alias.config.Config;
 import net.kunmc.lab.alias.util.DecolationConst;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -102,7 +103,39 @@ public class PlayerEvent implements Listener {
                 srcPlayer.teleport(distPlayer.getLocation());
                 e.setCancelled(true);
             }
+            return;
         }
+
+        // エンティティを特定の座標にtpさせるパターン
+        if (messages.length == 5) {
+            Player distPlayer = getPlayerFromAlias(messages[1]);
+            if (distPlayer != null) {
+                player.teleport(parseCoordinates(e.getPlayer(), Arrays.copyOfRange(messages, 2, 5)));
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    private Location parseCoordinates(Player sender, String[] coordinateStrings) {
+        if (coordinateStrings.length != 3) {
+            throw new IllegalArgumentException();
+        }
+
+        Location loc = sender.getLocation();
+        double[] coordinates = new double[]{loc.getX(), loc.getY(), loc.getZ()};
+        for (int i = 0; i < 3; i++) {
+            String s = coordinateStrings[i];
+            if (!s.startsWith("~")) {
+                coordinates[i] = Double.parseDouble(s);
+                continue;
+            }
+           
+            if (s.length() > 1) {
+                coordinates[i] = coordinates[i] + Double.parseDouble(s.substring(1));
+            }
+        }
+
+        return new Location(sender.getWorld(), coordinates[0], coordinates[1], coordinates[2]);
     }
 
     @EventHandler
