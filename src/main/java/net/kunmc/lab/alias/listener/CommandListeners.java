@@ -1,7 +1,5 @@
 package net.kunmc.lab.alias.listener;
 
-import net.kunmc.lab.alias.alias.AliasOperation;
-import net.kunmc.lab.alias.config.Config;
 import net.kunmc.lab.alias.util.AliasUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,41 +8,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 public class CommandListeners implements Listener {
-    private final Config config;
-
-    public CommandListeners(Config config) {
-        this.config = config;
+    public CommandListeners() {
     }
 
     @EventHandler
-    private void onCommandAlias(PlayerCommandPreprocessEvent e) {
+    private void onCommandTell(PlayerCommandPreprocessEvent e) {
         if (!e.getMessage()
-              .startsWith("/alias ")) {
+              .matches("^/(tell|w|msg)\\s.*")) {
             return;
         }
         String[] messages = e.getMessage()
                              .split(" ");
 
-        if (messages.length == 3 && messages[1].equals("resetname")) {
-            List<Player> targetPlayer = new ArrayList<>();
-            for (UUID uuid : config.playerAlias.keySet()) {
-                if (messages[2].equals(config.playerAlias.get(uuid))) {
-                    targetPlayer.add(AliasUtil.getPlayerFromUUID(uuid));
-                    break;
-                }
-            }
-
-            if (targetPlayer.size() != 0) {
-                AliasOperation.resetPlayerName(targetPlayer);
-                targetPlayer.forEach(p -> {
-                    config.playerAlias.remove(p.getUniqueId());
-                });
+        if (messages.length == 3) {
+            Player sentTargetPlayer = AliasUtil.getPlayerFromAlias(messages[1]);
+            if (sentTargetPlayer != null) {
+                sentTargetPlayer.sendMessage(ChatColor.GRAY + e.getPlayer()
+                                                               .getName() + "にささやかれました: " + messages[2] + ChatColor.RESET);
+                e.getPlayer()
+                 .sendMessage(ChatColor.GRAY + messages[1] + "にささやきました: " + messages[2] + ChatColor.RESET);
                 e.setCancelled(true);
             }
         }
@@ -131,26 +116,5 @@ public class CommandListeners implements Listener {
         }
 
         return new Location(sender.getWorld(), coordinates[0], coordinates[1], coordinates[2]);
-    }
-
-    @EventHandler
-    private void onCommandTell(PlayerCommandPreprocessEvent e) {
-        if (!e.getMessage()
-              .matches("^/(tell|w|msg)\\s.*")) {
-            return;
-        }
-        String[] messages = e.getMessage()
-                             .split(" ");
-
-        if (messages.length == 3) {
-            Player sentTargetPlayer = AliasUtil.getPlayerFromAlias(messages[1]);
-            if (sentTargetPlayer != null) {
-                sentTargetPlayer.sendMessage(ChatColor.GRAY + e.getPlayer()
-                                                               .getName() + "にささやかれました: " + messages[2] + ChatColor.RESET);
-                e.getPlayer()
-                 .sendMessage(ChatColor.GRAY + messages[1] + "にささやきました: " + messages[2] + ChatColor.RESET);
-                e.setCancelled(true);
-            }
-        }
     }
 }

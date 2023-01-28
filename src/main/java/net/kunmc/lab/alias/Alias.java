@@ -45,7 +45,7 @@ public final class Alias extends JavaPlugin implements Listener {
 
         // Event
         getServer().getPluginManager()
-                   .registerEvents(new CommandListeners(config), plugin);
+                   .registerEvents(new CommandListeners(), plugin);
         getServer().getPluginManager()
                    .registerEvents(this, plugin);
 
