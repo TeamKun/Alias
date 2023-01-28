@@ -49,7 +49,6 @@ public class PlayerEvent implements Listener {
     @EventHandler
     private void onCommandTp(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
-
         // tp個別対応しておく
         if (e.getMessage()
              .contains("/tp ")) {
@@ -107,6 +106,7 @@ public class PlayerEvent implements Listener {
 
     private Player getPlayerFromAlias(String alias) {
         Player player = null;
+        System.out.println(Alias.getPlugin().config.playerAlias);
         for (UUID uuid : Alias.getPlugin().config.playerAlias.keySet()) {
             if (alias.equals(Alias.getPlugin().config.playerAlias.get(uuid))) {
                 player = getPlayerFromUUID(uuid);
